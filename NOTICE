@@ -1,0 +1,8 @@
+This product contains the following libraries:
+
+OpenSocial PHP client library (http://code.google.com/p/opensocial-php-client/)
+Apache License 2.0
+
+OAuth PHP library (http://oauth.googlecode.com)
+Copyright (c) 2007 Andy Smith, released under an MIT License
+http://oauth.googlecode.com/svn/code/php/LICENSE.txt
