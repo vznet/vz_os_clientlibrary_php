@@ -24,31 +24,25 @@ vz.connect = {
     setCookie: function(parameters) {
         parameters = parameters.split('+').join('%2b');
         document.cookie = this.cookieKey + '=' + encodeURIComponent(parameters) + ';path=/';
-        var node = document.getElementById('vz_connect');
-        node.parentNode.removeChild(node);
-        node = document.getElementById('vz_popup');
-        node.parentNode.removeChild(node);
         window.location.reload();
     },
-    call: function() {
+    call: function(fields, message) {
         var params = '';
         params += 'type=user_agent';
         params += '&client_id=' + this.clientId;
         params += '&redirect_uri=' + encodeURIComponent(this.callbackUrl);
         params += '&response_type=token';
         params += '&scope=openid';
+        if (fields && typeof(fields) === 'object') {
+            params += '&fields=' + encodeURIComponent(fields.join(','));
+        }
+        if (message) {
+            params += '&message=' + encodeURIComponent(message);
+        }
 //        var url = '/OAuth2/Authorize/?' + params;
 //        var director = 'http://auth.static.svz-pcn-107:8063/director.html?path=' + encodeURIComponent(url);
 //        director += '&avz_host=trunk.avz.svz-pcn-107:8181&svz_host=trunk.svz.svz-pcn-107:8181&pvz_host=trunk.pvz.svz-pcn-107:8181';
         var director = 'https://secure.studivz.net/OAuth2/Authorize/?' + params;
-        var div = document.createElement('div');
-        div.className = 'vz_connect';
-        div.id = 'vz_connect';
-        var iframe = document.createElement('iframe');
-        iframe.className = 'vz_popup';
-        iframe.id = 'vz_popup';
-        document.body.appendChild(div);
-        document.body.appendChild(iframe);
-        iframe.contentWindow.location.replace(director);
+        window.open(director, '_blank', 'width=420,height=800');
     }
 };

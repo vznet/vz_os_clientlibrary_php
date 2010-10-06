@@ -17,6 +17,7 @@
       <li><a href="connect.php">OAuth2 Web Flow, retrieving user data</a></li>
       <li><a href="useragent.php">OAuth2 UserAgent Flow, retrieving user data</a></li>
       <li><a href="twolegged_notification.php">OAuth1 Two Legged, sending notification</a></li>
+      <li><a href="twolegged_user.php">OAuth1 Two Legged, retrieving user data</a></li>
       <li><a href="threelegged_user.php">OAuth1 Three Legged, retrieving user data</a></li>
     </ul>
   </body>

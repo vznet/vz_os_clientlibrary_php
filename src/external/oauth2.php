@@ -101,13 +101,19 @@ class OAuth2_Service
     /**
      * redirect to authorize endpoint of service
      */
-    public function authorize() {
+    public function authorize(array $fields = array(), $message = '') {
         $parameters = array(
             'type' => 'web_server',
             'client_id' => $this->_client->getClientKey(),
             'redirect_uri' => $this->_client->getCallbackUrl(),
             'response_type' => 'code',
         );
+        if ($fields) {
+            $parameters['fields'] = implode(',', $fields);
+        }
+        if ($message) {
+            $parameters['message'] = $message;
+        }
         if ($this->_scope) {
             $parameters['scope'] = $this->_scope;
         }

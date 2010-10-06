@@ -102,7 +102,7 @@ class osapiOAuth2 extends osapiAuth
      * @param string $scope optional
      * @return osapiOAuth2
      */
-    public static function performOAuthLogin($consumerKey, $consumerSecret, osapiStorage $storage, osapiProvider $provider, $callbackUrl, $scope = null, $localUserId = null) {
+    public static function performOAuthLogin($consumerKey, $consumerSecret, osapiStorage $storage, osapiProvider $provider, $callbackUrl, $scope = null, array $fields = array(), $message = '', $localUserId = null) {
         $auth = new osapiOAuth2($consumerKey, $consumerSecret, $storage, $provider, $callbackUrl, $scope, $localUserId);
         if (($token = $storage->get($auth->storageKey)) !== false) {
           $auth->accessToken = $token;
@@ -125,7 +125,7 @@ class osapiOAuth2 extends osapiAuth
             throw new osapiException($_GET['error'] . (isset($_GET['error_description']) ? (' ' . $_GET['error_description']) : ''), null, null);
           } else {
             $auth->storeCallbackUrl();
-            $auth->service->authorize();
+            $auth->service->authorize($fields, $message);
           }
         }
 

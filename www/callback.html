@@ -6,7 +6,8 @@
   </head>
   <body>
       <script type="text/javascript">
-        parent.vz.connect.setCookie(location.hash.substr(1));
+        opener.vz.connect.setCookie(location.hash.substr(1));
+        window.close();
       </script>
   </body>
 </html>

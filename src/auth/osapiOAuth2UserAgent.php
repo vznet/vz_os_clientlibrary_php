@@ -55,7 +55,7 @@ class osapiOAuth2UserAgent extends osapiOAuth2
                         $consumerSecret,
                         $cookie['access_token'],
                         $cookie['issued_at'],
-                        isset($cookie['userId']) ? $cookie['userId'] : '', 
+                        isset($cookie['user_id']) ? $cookie['user_id'] : '',
                         ''
                 );
                 if (isset($cookie['userId'])) {

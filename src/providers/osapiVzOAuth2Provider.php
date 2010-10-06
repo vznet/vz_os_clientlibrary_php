@@ -23,7 +23,7 @@ class osapiVzOAuth2Provider extends osapiProvider {
 
   public function __construct($network = osapiVzOAuth2Provider::STUDIVZ, osapiHttpProvider $httpProvider = null) {
     $platform = 'secure.' . $network . '.net';
-    $shindig  = $network . '.gadgets.apivz.net';
+    $shindig  = $network . '-opensocial.apivz.net';
     parent::__construct(null,
         "https://" . $platform . "/OAuth2/Authorize/",
         "https://" . $platform . "/OAuth2/AccessToken/",
