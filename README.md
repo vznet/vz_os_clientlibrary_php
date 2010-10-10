@@ -68,3 +68,4 @@ For full documentation on the VZ OpenSocial API, OAuth 1.0a and OAuth 2.0
 authorization and VZ-Login go to:
 
 http://developer.studivz.net/wiki
+
