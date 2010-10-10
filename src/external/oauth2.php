@@ -78,6 +78,11 @@ class OAuth2_Service
      * @var string
      */
     private $_scope;
+
+    /**
+     * @var string
+     */
+    private $_state;
     
     /**
      * @param OAuth2_Client $client
@@ -85,17 +90,20 @@ class OAuth2_Service
      * @param osapiStorage $dataStore
      * @param string $storageKey
      * @param string $scope optional
+     * @param string $state optional
      */
     public function  __construct(OAuth2_Client $client,
             OAuth2_Service_Configuration $configuration,
             osapiStorage $dataStore,
             $storageKey,
-            $scope = null) {
+            $scope = null,
+            $state = null) {
         $this->_client = $client;
         $this->_configuration = $configuration;
         $this->_dataStore = $dataStore;
         $this->_storageKey = $storageKey;
         $this->_scope = $scope;
+        $this->_state = $state;
     }
 
     /**
@@ -117,6 +125,11 @@ class OAuth2_Service
         if ($this->_scope) {
             $parameters['scope'] = $this->_scope;
         }
+
+        if ($this->_state) {
+            $parameters['state'] = $this->_state;
+        }
+        
         $url = $this->_configuration->getAuthorizeEndpoint() . '?' . http_build_query($parameters);
 
         header('Location: ' . $url);
@@ -147,6 +160,10 @@ class OAuth2_Service
 
         if ($this->_scope) {
             $parameters['scope'] = $this->_scope;
+        }
+
+        if ($this->_state) {
+            $parameters['state'] = $this->_state;
         }
 
         $http = new OAuth2_HttpClient($this->_configuration->getAccessTokenEndpoint(), 'POST', http_build_query($parameters));

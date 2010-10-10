@@ -58,8 +58,17 @@ class osapiOAuth2 extends osapiAuth
      * @param osapiProvider $provider
      * @param string $callbackUrl
      * @param string $scope optional
+     * @param string $state optional
+     * @param string $localUserid optional
      */
-    public function __construct($consumerKey, $consumerSecret, osapiStorage $storage, osapiProvider $provider, $callbackUrl, $scope = null, $localUserId = null) {
+    public function __construct($consumerKey,
+            $consumerSecret,
+            osapiStorage $storage,
+            osapiProvider $provider,
+            $callbackUrl,
+            $scope = null,
+            $state = null,
+            $localUserId = null) {
         $this->storage = $storage;
         $this->storageKey = 'OAuth2:' . $consumerKey . ':' . $localUserId;
         // configuration of client credentials
@@ -73,7 +82,7 @@ class osapiOAuth2 extends osapiAuth
                 $provider->authorizeUrl,
                 $provider->accessTokenUrl);
 
-        $this->service = new OAuth2_Service($client, $configuration, $storage, $this->storageKey, $scope);
+        $this->service = new OAuth2_Service($client, $configuration, $storage, $this->storageKey, $scope, $state);
 
         $this->consumerToken = new OAuthConsumer($consumerKey, $consumerSecret, null);
         $this->accessToken = null;
@@ -93,6 +102,13 @@ class osapiOAuth2 extends osapiAuth
     }
 
     /**
+     * @return OAuth2_Token
+     */
+    public function getAccessToken() {
+        return $this->accessToken;
+    }
+    
+    /**
      *
      * @param string $consumerKey
      * @param string $consumerSecret
@@ -100,10 +116,30 @@ class osapiOAuth2 extends osapiAuth
      * @param osapiProvider $provider
      * @param string $callbackUrl
      * @param string $scope optional
+     * @param array $fields optional
+     * @param string $message optional
+     * @param string $state optional
+     * @param string $localUserId optional
      * @return osapiOAuth2
      */
-    public static function performOAuthLogin($consumerKey, $consumerSecret, osapiStorage $storage, osapiProvider $provider, $callbackUrl, $scope = null, array $fields = array(), $message = '', $localUserId = null) {
-        $auth = new osapiOAuth2($consumerKey, $consumerSecret, $storage, $provider, $callbackUrl, $scope, $localUserId);
+    public static function performOAuthLogin($consumerKey,
+            $consumerSecret,
+            osapiStorage $storage,
+            osapiProvider $provider,
+            $callbackUrl,
+            $scope = null,
+            array $fields = array(),
+            $message = '',
+            $state = null,
+            $localUserId = null) {
+        $auth = new osapiOAuth2($consumerKey,
+                $consumerSecret,
+                $storage,
+                $provider,
+                $callbackUrl,
+                $scope,
+                $state,
+                $localUserId);
         if (($token = $storage->get($auth->storageKey)) !== false) {
           $auth->accessToken = $token;
           if ($token->getSignature() && $token->getIssued_at()) {
@@ -152,7 +188,17 @@ class osapiOAuth2 extends osapiAuth
         }
     }
 
-    protected function verifySignature($retrievedSignature, $consumerSecret, $accessToken, $issuedAt, $userId, $expiresIn) {
+    /**
+     *
+     * @param string $retrievedSignature
+     * @param string $consumerSecret
+     * @param string $accessToken
+     * @param int $issuedAt
+     * @param string $userId
+     * @param int $expiresIn
+     */
+    protected function verifySignature($retrievedSignature,
+            $consumerSecret, $accessToken, $issuedAt, $userId, $expiresIn) {
         $baseString = $accessToken . $issuedAt . $userId . $expiresIn;
 
         $signature = base64_encode(hash_hmac('sha1', $baseString, $consumerSecret, true));
