@@ -26,7 +26,7 @@ vz.connect = {
         document.cookie = this.cookieKey + '=' + encodeURIComponent(parameters) + ';path=/';
         window.location.reload();
     },
-    call: function(fields, message) {
+    call: function(fields, message, state) {
         var params = '';
         params += 'type=user_agent';
         params += '&client_id=' + this.clientId;
@@ -39,10 +39,10 @@ vz.connect = {
         if (message) {
             params += '&message=' + encodeURIComponent(message);
         }
-//        var url = '/OAuth2/Authorize/?' + params;
-//        var director = 'http://auth.static.svz-pcn-107:8063/director.html?path=' + encodeURIComponent(url);
-//        director += '&avz_host=trunk.avz.svz-pcn-107:8181&svz_host=trunk.svz.svz-pcn-107:8181&pvz_host=trunk.pvz.svz-pcn-107:8181';
+        if (state) {
+            params += '&state=' + encodeURIComponent(state);
+        }
         var director = 'https://secure.studivz.net/OAuth2/Authorize/?' + params;
-        window.open(director, '_blank', 'width=420,height=800');
+        window.open(director, '_blank', 'width=570,height=700');
     }
 };

@@ -24,11 +24,16 @@ class osapiOAuth2UserAgent extends osapiOAuth2
      * @param string $consumerKey
      * @param string $consumerSecret
      * @param osapiStorage $storage
+     * @param string $cookieKey
      * @param osapiProvider $provider
-     * @param string $callbackUrl
-     * @param string $scope optional
+     * @param string $localUserId optional
      */
-    public function __construct($consumerKey, $consumerSecret, osapiStorage $storage, $cookieKey, osapiProvider $provider, $localUserId = null) {
+    public function __construct($consumerKey,
+            $consumerSecret,
+            osapiStorage $storage,
+            $cookieKey,
+            osapiProvider $provider,
+            $localUserId = null) {
         $this->storage = $storage;
         $this->storageKey = 'OAuth2u:' . $consumerKey . ':' . $localUserId;
 
@@ -64,6 +69,12 @@ class osapiOAuth2UserAgent extends osapiOAuth2
             }
 
             $this->accessToken = new OAuth2_Token($cookie['access_token'], null, null);
+            unset($cookie['access_token']);
+            unset($cookie['signature']);
+            unset($cookie['issued_at']);
+            foreach ($cookie as $key => $value) {
+                $this->accessToken->{'set' . $key}($value);
+            }
             $storage->set($this->storageKey, $this->accessToken);
         }
     }
