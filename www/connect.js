@@ -42,7 +42,7 @@ vz.connect = {
         if (state) {
             params += '&state=' + encodeURIComponent(state);
         }
-        var director = 'https://secure.studivz.net/OAuth2/Authorize/?' + params;
+        var director = 'https://platform-redirect.vz-modules.net/r/OAuth2/Authorize/?' + params;
         window.open(director, '_blank', 'width=570,height=700');
     }
 };
