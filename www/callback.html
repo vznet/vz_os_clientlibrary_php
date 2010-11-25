@@ -6,7 +6,7 @@
   </head>
   <body>
       <script type="text/javascript">
-        opener.vz.connect.setCookie(location.hash.substr(1));
+        opener.vz.id.authStorage.setAuthParameterHash(location.hash.substr(1));
         window.close();
       </script>
   </body>

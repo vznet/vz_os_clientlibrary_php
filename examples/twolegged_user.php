@@ -27,6 +27,15 @@ $self_request_params = array(
 
 $batch->add($osapi->people->get($self_request_params), 'self');
 
+// Fetch the friends from current user.
+$self_request_params = array(
+  'userId' => '@me',              // Person we are fetching.
+  'groupId' => '@friends',           // @self for one person.
+  'fields' => array()             // Which profile fields to request.
+);
+
+$batch->add($osapi->people->get($self_request_params), 'self');
+
 $return = $batch->execute();
 
 

@@ -2,7 +2,7 @@
 require_once '../src/osapi.php';
 $consumerKey = 'CONSUMER_KEY';
 $consumerSecret = 'CONSUMER_SECRET';
-$cookieKey = 'vz_' . $consumerKey;
+$cookieKey = 'vz' . $consumerKey;
 
 // Enable logger.
 osapiLogger::setLevel(osapiLogger::INFO);
@@ -12,6 +12,8 @@ $provider = new osapiVzOAuth2Provider(osapiVzOAuth2Provider::STUDIVZ);
 $storage = new osapiFileStorage('/tmp/osapi');
 
 $auth = new osapiOAuth2UserAgent($consumerKey, $consumerSecret, $storage, $cookieKey, $provider);
+
+$content = '';
 
 if ($auth->hasAccessToken()) {
     $osapi = new osapi($provider, $auth);
@@ -31,26 +33,39 @@ if ($auth->hasAccessToken()) {
     $result = $batch->execute();
 
     $content = 'Hello ' . $result['self']['result']['displayName'];
-} else {
-    $content = '<a href="javascript:;" onclick="login()"><img src="../www/VZ_login01.png" border="0" /></a>';
 }
 ?>
 <html>
     <head>
-        <link rel="stylesheet" href="../www/connect.css" type="text/css" >
+        <script src="http://static.pe.studivz.net/Js/id/v2/library.js"
+            data-authority="platform-redirect.vz-modules.net/r"
+            data-authorityssl="platform-redirect.vz-modules.net/r" type="text/javascript"></script>
     </head>
     <body>
         <?php
             echo $content;
         ?>
-        <script type="text/javascript" src="../www/connect.js"></script>
         <script type="text/javascript">
-            function login() {
-                vz.connect.call(["addresses"],"message","state");
-            }
-            vz.connect.clientId = '<?= $consumerKey ?>';
-            vz.connect.cookieKey = '<?= $cookieKey ?>';
-            vz.connect.callbackUrl = 'http://localhost:8062/vz_php_os_clientlibrary/www/callback.html';
+            function login(c) {
+                if (c.error) {
+                    alert(c.error);
+                    return;
+                }
+
+                var parameters = 'access_token=' + c.access_token;
+                parameters += '&user_id=' + c.user_id;
+                parameters += '&signature=' + c.signature;
+                parameters += '&issued_at=' + c.issued_at;
+
+                document.cookie = 'vz' + c.client_id + '=' + encodeURIComponent(parameters);
+                window.location.reload();
+         }
+        </script>
+        <script type="vz/login">
+           client_id : <?= $consumerKey . PHP_EOL ?>
+           redirect_uri : http://localhost:8062/vz_php_os_clientlibrary/www/callback.html
+           callback : login
+           fields : name,emails
         </script>
     </body>
 </html>
