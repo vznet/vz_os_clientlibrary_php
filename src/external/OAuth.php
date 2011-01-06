@@ -365,7 +365,9 @@ class OAuthRequest {
 
     $parts = OAuthUtil::urlencode_rfc3986($parts);
 
-    return implode('&', $parts);
+    $baseString = implode('&', $parts);
+    osapiLogger::info('oauth base string ' . $baseString);
+    return $baseString;
   }
 
   /**
