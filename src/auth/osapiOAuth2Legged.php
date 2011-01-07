@@ -88,7 +88,7 @@ class osapiOAuth2Legged extends osapiAuth {
    * @return string the signed url
    */
   public function sign($method, $url, $params = array(), $postBody = false, &$headers = array()) {
-    $oauthRequest = OAuthRequest::from_request($method, $url, $params);
+    $oauthRequest = new OAuthRequest($method, $url, $params);
 
     $params = $this->mergeParameters($params);
 
