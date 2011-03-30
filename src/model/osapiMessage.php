@@ -31,6 +31,8 @@ class osapiMessage {
   public $body;
   public $title;
   public $type;
+  public $opt_params;
+
   public $types = array(
 	    /* An email */
 	    'EMAIL',
@@ -110,6 +112,14 @@ class osapiMessage {
       throw new Exception('Invalid message type');
     }
     $this->type = $newType;
+  }
+
+  public function setOpt_params($optParams) {
+    $this->opt_params = $optParams;
+  }
+
+  public function getOpt_params() {
+    return $this->opt_params;
   }
 
   /**
