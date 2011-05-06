@@ -10,15 +10,26 @@ $consumerKey    = 'CONSUMER_KEY';
 $consumerSecret = 'CONSUMER_SECRET';
 $callbackUrl    = 'CALLBACK_URL';
 
+// needed to scope the access token storage
+$localUserId    = '';
+
 $storage  = new osapiFileStorage('/tmp/osapi');
-$provider = new osapiVzOAuth2Provider(osapiVzOAuth2Provider::STUDIVZ);
+$provider = new osapiVzOAuth2Provider(osapiVzOAuth2Provider::STUDIVZ); 
+
+if (isset($_GET['platform']) && $_GET['platform'] === 'schuelervz') {
+    $provider = new osapiVzOAuth2Provider(osapiVzOAuth2Provider::SCHUELERVZ);
+}
+
 $auth     = osapiOAuth2::performOAuthLogin($consumerKey, $consumerSecret, $storage, $provider, $callbackUrl,
         'openid',
         array('gender', 'emails', 'thumbnailUrl'),
         'my custom message',
-        'state');
+        'state',
+        $localUserId);
 
-var_dump($auth->getAccessToken()->getstate());
+if ($auth->getAccessToken()->getplatform() === 'schuelervz') {
+    $provider = new osapiVzOAuth2Provider(osapiVzOAuth2Provider::SCHUELERVZ);
+}
 
 $osapi    = new osapi($provider, $auth);
 

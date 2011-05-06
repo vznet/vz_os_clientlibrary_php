@@ -237,6 +237,10 @@ class OAuth2_Service
         foreach ($response as $key => $value) {
             $token->{'set' . $key}($value);
         }
+        
+        if(isset($_GET['platform'])) {
+            $token->setplatform($_GET['platform']);
+        }
 
         $this->_dataStore->set($this->_storageKey, $token);
     }
